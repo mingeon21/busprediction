@@ -36,8 +36,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         child: TabBar(
           controller: _tabController,
           tabs: [
-            Tab(text: 'Currency Calculator', icon: Icon(Icons.calculate)),   // Calculator icon
-            Tab(text: 'Graph & Rates', icon: Icon(Icons.bar_chart)),          // Bar chart icon
+            Tab(text: 'Calculator', icon: Icon(Icons.calculate)),   // Calculator icon
+            Tab(text: 'Rates', icon: Icon(Icons.bar_chart)),          // Bar chart icon
             Tab(text: 'Prediction', icon: Icon(Icons.trending_up)),           // Trending icon
           ],
         ),

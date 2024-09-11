@@ -15,19 +15,24 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
   double _exchangeRate = 0.0;
   double _convertedAmount = 0.0;
 
-  // Replace with your ExchangeRate-API key
   final String _apiKey = 'b6296e6c0baecba5eb882bb654d4768b';
 
+  @override
+  void initState() {
+    super.initState();
+    _amountController.text = '100';
+    _fetchExchangeRate();
+  }
+
   Future<void> _fetchExchangeRate() async {
-    final String url = 'http://data.fixer.io/api/latest?access_key=$_apiKey';
+    final String url = 'https://data.fixer.io/api/latest?access_key=$_apiKey';
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data['success']) {
           setState(() {
-            // Extract the exchange rate for the selected 'toCurrency' from the 'rates' map
-            _exchangeRate = data['rates'][_toCurrency];
+            _exchangeRate = data['rates'][_toCurrency] / data['rates'][_fromCurrency];
             _convertAmount();
           });
         } else {
@@ -124,12 +129,12 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
             ),
             SizedBox(height: 20),
             Text(
-              'Exchange Rate: $_exchangeRate',
+              'Exchange Rate: ${_exchangeRate.toStringAsFixed(2)} $_fromCurrency to $_toCurrency',
               style: TextStyle(fontSize: 18),
             ),
             SizedBox(height: 20),
             Text(
-              'Converted Amount: $_convertedAmount $_toCurrency',
+              'Converted Amount: ${_convertedAmount.toStringAsFixed(2)} $_toCurrency',
               style: TextStyle(fontSize: 18),
             ),
           ],
