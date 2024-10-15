@@ -1,6 +1,5 @@
+import 'package:currencyexchangerate/exchange_rate_service.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class CurrencyCalculator extends StatefulWidget {
@@ -15,8 +14,6 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
   double _exchangeRate = 0.0;
   double _convertedAmount = 0.0;
 
-  final String _apiKey = 'b6296e6c0baecba5eb882bb654d4768b';
-
   @override
   void initState() {
     super.initState();
@@ -25,30 +22,13 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
   }
 
   Future<void> _fetchExchangeRate() async {
-    final String url = 'https://data.fixer.io/api/latest?access_key=$_apiKey';
     try {
-      final response = await http.get(Uri.parse(url));
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        if (data['success']) {
-          setState(() {
-            _exchangeRate = data['rates'][_toCurrency] / data['rates'][_fromCurrency];
-            _convertAmount();
-          });
-        } else {
-          Fluttertoast.showToast(
-            msg: 'Failed to load exchange rates',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-          );
-        }
-      } else {
-        Fluttertoast.showToast(
-          msg: 'Failed to load exchange rates',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-        );
-      }
+      final currencyMap = await ExchangeRateService.getRealTimeRates(_fromCurrency);
+      setState(() {
+        _exchangeRate = currencyMap[_toCurrency]!;
+        _convertAmount();
+      });
+        
     } catch (e) {
       Fluttertoast.showToast(
         msg: 'Error: $e',

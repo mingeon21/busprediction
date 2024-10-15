@@ -1,7 +1,7 @@
-import 'package:currencyexchangerate/fixer_service.dart';
 import 'package:currencyexchangerate/graph.dart';
 import 'package:flutter/material.dart';
 import 'currency_calculator.dart';
+import 'fixer_service.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -14,20 +14,20 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   @override
   void initState() {
-  super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    super.initState();
+      _tabController = TabController(length: 3, vsync: this);
 
-    // Fetch exchange rates for the last 3 days
-    _historicalRates = fetchThreeDaysRates();
+      // Fetch exchange rates for the last 3 days
+      _historicalRates = fetchThreeDaysRates();
   }
 
   // Helper function to fetch exchange rates for the last 3 days
   Future<Map<String, dynamic>> fetchThreeDaysRates() async {
     try {
       // Fetch rates for three consecutive days (replace with actual dates as needed)
-      final rateDay1 = await FixerService.getHistoricalRates('2023-10-10', 'EUR', 'USD,GBP');
-      final rateDay2 = await FixerService.getHistoricalRates('2023-10-11', 'EUR', 'USD,GBP');
-      final rateDay3 = await FixerService.getHistoricalRates('2023-10-12', 'EUR', 'USD,GBP');
+      final rateDay1 = await FixerService.getHistoricalRates('2023-10-10', 'EUR', 'USD');
+      final rateDay2 = await FixerService.getHistoricalRates('2023-10-11', 'EUR', 'USD');
+      final rateDay3 = await FixerService.getHistoricalRates('2023-10-12', 'EUR', 'USD');
 
       // Combine the results into a single map
       return {
