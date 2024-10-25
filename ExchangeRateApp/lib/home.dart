@@ -1,7 +1,9 @@
 import 'package:currencyexchangerate/graph.dart';
+import 'package:currencyexchangerate/predict.dart';
 import 'package:flutter/material.dart';
 import 'currency_calculator.dart';
 import 'fixer_service.dart';
+
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -14,8 +16,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   @override
   void initState() {
+    print('home');
     super.initState();
-      _tabController = TabController(length: 3, vsync: this);
+      _tabController = TabController(length: 4, vsync: this);
 
       // Fetch exchange rates for the last 3 days
       _historicalRates = fetchThreeDaysRates();
@@ -29,12 +32,13 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       final rateDay2 = await FixerService.getHistoricalRates('2023-10-11', 'EUR', 'USD');
       final rateDay3 = await FixerService.getHistoricalRates('2023-10-12', 'EUR', 'USD');
 
-      // Combine the results into a single map
+
       return {
-        '2023-10-10': rateDay1['rates']['USD'],
-        '2023-10-11': rateDay2['rates']['USD'],
-        '2023-10-12': rateDay3['rates']['USD'],
+        if (rateDay1.containsKey('rates')) '2023-10-10': rateDay1['rates']['USD'],
+        if (rateDay2.containsKey('rates')) '2023-10-11': rateDay2['rates']['USD'],
+        if (rateDay3.containsKey('rates')) '2023-10-12': rateDay3['rates']['USD'],
       };
+      
     } catch (e) {
       print('Error fetching historical rates: $e');
       return {};
@@ -55,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         children: [
           CurrencyCalculator(),
           GraphTab(historicalRates: _historicalRates),
-          Center(child: Text('Prediction Content')),
+          PredictScreen(),
         ],
       ),
       bottomNavigationBar: Material(

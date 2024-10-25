@@ -1,6 +1,5 @@
 import 'package:currencyexchangerate/exchange_rate_service.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class CurrencyCalculator extends StatefulWidget {
   @override
@@ -17,32 +16,36 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
   @override
   void initState() {
     super.initState();
+    print('CurrencyCalculator');
     _amountController.text = '100';
     _fetchExchangeRate();
   }
 
   Future<void> _fetchExchangeRate() async {
+    print(_fetchExchangeRate);
     try {
       final currencyMap = await ExchangeRateService.getRealTimeRates(_fromCurrency);
+      print(currencyMap);
+      print(_toCurrency);
       setState(() {
         _exchangeRate = currencyMap[_toCurrency]!;
         _convertAmount();
       });
         
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: 'Error: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
+      print('error:$e');
     }
   }
 
   void _convertAmount() {
+    print('_convertAmount');
     final double amount = double.tryParse(_amountController.text) ?? 0;
     setState(() {
       _convertedAmount = amount * _exchangeRate;
     });
+    print(amount);
+    print(_convertedAmount);
+    print(_exchangeRate);
   }
 
   @override
