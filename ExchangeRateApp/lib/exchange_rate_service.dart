@@ -16,13 +16,11 @@ class ExchangeRateService {
         // Filter for the required currencies
         final Map<String, double> filteredRates = {};
         const List<String> targetCurrencies = ['USD', 'EUR', 'GBP', 'JPY', 'AUD'];
-
         targetCurrencies.forEach((currency) {
           if (data['conversion_rates'][currency] != null) {
-            filteredRates[currency] = data['conversion_rates'][currency];
+            filteredRates[currency] = data['conversion_rates'][currency].toDouble();
           }
         });
-
         return filteredRates;
       } else {
         throw Exception('Failed to load real-time exchange rates');

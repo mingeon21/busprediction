@@ -22,7 +22,7 @@ class _CurrencyCalculatorState extends State<CurrencyCalculator> {
   }
 
   Future<void> _fetchExchangeRate() async {
-    print(_fetchExchangeRate);
+    print('from:$_fromCurrency');
     try {
       final currencyMap = await ExchangeRateService.getRealTimeRates(_fromCurrency);
       print(currencyMap);
